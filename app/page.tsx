@@ -335,10 +335,23 @@ export default function Home() {
         setElements(newElements)
       } else if (type) {
         try {
-          const response = await fetch(`/mappings/${type}.json`)
+          const response = await fetch(`/mappings/${type}.json`, {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          })
+          
           if (!response.ok) {
-            throw new Error(`Failed to load ${type}.json`)
+            throw new Error(`Failed to load ${type}.json: ${response.status} ${response.statusText}`)
           }
+          
+          const contentType = response.headers.get('content-type')
+          if (!contentType || !contentType.includes('application/json')) {
+            const text = await response.text()
+            console.error('Expected JSON but got:', text.substring(0, 200))
+            throw new Error(`Invalid response type: ${contentType}`)
+          }
+          
           const data: DecayMapping = await response.json()
           setSelectedDecay(type)
           const newElements = Object.values(data).map((val, i) => {
@@ -350,7 +363,7 @@ export default function Home() {
           setElements(newElements)
         } catch (error) {
           console.error('Error loading decay data:', error)
-          alert('Error loading decay data')
+          alert(`Error loading decay data: ${error instanceof Error ? error.message : 'Unknown error'}`)
         }
       }
     },
