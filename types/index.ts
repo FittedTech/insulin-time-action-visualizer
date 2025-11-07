@@ -82,6 +82,15 @@ export interface DecayMapping {
 }
 
 /**
+ * Insulin decay data file format with examples, description, and minute decays.
+ */
+export interface InsulinDecayData {
+  examples: string
+  description: string
+  minuteDecays: DecayMapping
+}
+
+/**
  * Collapsible section state for the control panel.
  */
 export interface PanelSections {

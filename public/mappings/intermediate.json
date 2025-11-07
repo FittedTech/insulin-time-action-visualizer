@@ -1,4 +1,7 @@
 {
+  "examples": "NPH insulin (Humulin N, Novolin N), Lente insulin",
+  "description": "Intermediate-acting insulin provides background insulin coverage. It starts working in 1-3 hours, peaks in 4-12 hours, and lasts 12-18 hours. Typically taken once or twice daily to provide basal insulin coverage throughout the day and night.",
+  "minuteDecays": {
     "0": 0,
     "5": 0.006666667,
     "10": 0.013333333,
@@ -180,4 +183,5 @@
     "890": 0.0035,
     "895": 0.0005,
     "900": 0
+  }
 }

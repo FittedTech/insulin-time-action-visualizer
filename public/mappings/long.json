@@ -1,4 +1,7 @@
 {
+  "examples": "Lantus (glargine), Levemir (detemir), Basaglar, Toujeo, Tresiba (degludec)",
+  "description": "Long-acting insulin provides steady, background insulin coverage throughout the day. It has no pronounced peak and works consistently for 18-24 hours (or up to 42 hours for Tresiba). Taken once or twice daily as basal insulin to maintain stable blood sugar levels between meals and overnight.",
+  "minuteDecays": {
     "0": 0,
     "5": 0.005666667,
     "10": 0.011333333,
@@ -248,4 +251,5 @@
     "1230": 0.005516666,
     "1235": 0.002266666,
     "1240": 0
+  }
 }

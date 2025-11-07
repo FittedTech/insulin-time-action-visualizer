@@ -12,6 +12,7 @@ import type {
   CursorPosition,
   DecayType,
   DecayMapping,
+  InsulinDecayData,
 } from '@/types'
 
 /**
@@ -54,6 +55,9 @@ export default function Home() {
   const [isDragging, setIsDragging] = useState<boolean>(false)
   const [dragTargets, setDragTargets] = useState<number[]>([])
   const [selectedDecay, setSelectedDecay] = useState<DecayType | null>('rapid')
+  const [decayExamples, setDecayExamples] = useState<string>('')
+  const [decayDescription, setDecayDescription] = useState<string>('')
+  const [decayTitle, setDecayTitle] = useState<string>('')
   const [importModalOpen, setImportModalOpen] = useState<boolean>(false)
   const [exportModalOpen, setExportModalOpen] = useState<boolean>(false)
   const [importText, setImportText] = useState<string>('')
@@ -326,6 +330,9 @@ export default function Home() {
     async (userData: DecayMapping | false, type: DecayType | null) => {
       if (userData !== false) {
         setSelectedDecay(null)
+        setDecayExamples('')
+        setDecayDescription('')
+        setDecayTitle('')
         const newElements = Object.values(userData).map((val, i) => {
           if (typeof val === 'number') {
             return generateSegment(i, val)
@@ -352,9 +359,24 @@ export default function Home() {
             throw new Error(`Invalid response type: ${contentType}`)
           }
           
-          const data: DecayMapping = await response.json()
+          const data: InsulinDecayData = await response.json()
           setSelectedDecay(type)
-          const newElements = Object.values(data).map((val, i) => {
+          setDecayExamples(data.examples || '')
+          setDecayDescription(data.description || '')
+          
+          // Set title based on decay type
+          const titleMap: Record<DecayType, string> = {
+            rapid: 'Rapid-Acting Insulin',
+            short: 'Short-Acting Insulin',
+            intermediate: 'Intermediate-Acting Insulin',
+            long: 'Long-Acting Insulin',
+            ivBolus: 'IV Bolus Insulin',
+          }
+          setDecayTitle(titleMap[type] || '')
+          
+          // Handle both new format (minuteDecays) and legacy format
+          const decayData = data.minuteDecays || data
+          const newElements = Object.values(decayData).map((val, i) => {
             if (typeof val === 'number') {
               return generateSegment(i, val)
             }
@@ -589,13 +611,33 @@ export default function Home() {
           <div className="max-w-[1920px] mx-auto h-full">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 sm:gap-6 h-full">
               {/* Canvas Area */}
-              <div className="md:col-span-3 bg-gradient-to-br from-white via-blue-50/30 to-cyan-50/20 rounded-xl shadow-2xl border-2 border-gray-200/50 backdrop-blur-sm p-5 sm:p-6 min-h-0 relative overflow-hidden">
+              <div className="md:col-span-3 bg-gradient-to-br from-white via-blue-50/30 to-cyan-50/20 rounded-xl shadow-2xl border-2 border-gray-200/50 backdrop-blur-sm p-5 sm:p-6 min-h-0 relative overflow-hidden flex flex-col">
                 {/* Decorative corner accent */}
                 <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-primary-200/20 to-transparent rounded-bl-full pointer-events-none" />
                 <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-cyan-200/20 to-transparent rounded-tr-full pointer-events-none" />
                 
+                {/* Graph info card */}
+                {(decayTitle || decayDescription || decayExamples) && (
+                  <div className="mb-4 flex-shrink-0 relative z-10">
+                    <div className="bg-white/95 backdrop-blur-sm rounded-lg border-2 border-gray-200/60 shadow-lg p-4">
+                      {decayTitle && (
+                        <h2 className="text-base font-bold text-gray-900 mb-2">{decayTitle}</h2>
+                      )}
+                      {decayDescription && (
+                        <p className="text-sm text-gray-700 mb-3 leading-relaxed">{decayDescription}</p>
+                      )}
+                      {decayExamples && (
+                        <div>
+                          <h3 className="text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">Examples:</h3>
+                          <p className="text-xs text-gray-600 leading-relaxed">{decayExamples}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+                
                 {/* Inner graph container */}
-                <div className="h-full relative bg-white/80 backdrop-blur-sm rounded-lg border-2 border-gray-200/60 shadow-inner p-3 ring-1 ring-gray-100/50">
+                <div className="flex-1 min-h-0 relative bg-white/80 backdrop-blur-sm rounded-lg border-2 border-gray-200/60 shadow-inner p-3 ring-1 ring-gray-100/50">
                   <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/5 to-primary-50/10 rounded-lg pointer-events-none" />
                   <Canvas
                     canvasRef={canvasRef}

@@ -107,7 +107,7 @@ export default function ControlPanel({
     axes: true,
     options: true,
     datasets: true,
-    actions: true,
+    actions: false, // Actions is no longer collapsible
   })
 
   /**
@@ -121,16 +121,16 @@ export default function ControlPanel({
 
   return (
     <div className="w-full h-full overflow-y-auto space-y-3 p-4">
-      {/* Axes Panel */}
+      {/* Datasets Panel */}
       <div className="bg-white/90 backdrop-blur-sm rounded-lg shadow-md overflow-hidden border border-gray-200/50">
         <button
-          onClick={() => toggleSection('axes')}
+          onClick={() => toggleSection('datasets')}
           className="w-full px-3 py-2 bg-primary-600 text-white font-semibold text-sm flex items-center justify-between hover:bg-primary-700 transition-colors"
-          aria-expanded={isOpen.axes}
+          aria-expanded={isOpen.datasets}
         >
-          <span>Axes</span>
+          <span>Datasets</span>
           <svg
-            className={`w-5 h-5 transition-transform ${isOpen.axes ? 'rotate-180' : ''}`}
+            className={`w-5 h-5 transition-transform ${isOpen.datasets ? 'rotate-180' : ''}`}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -138,50 +138,58 @@ export default function ControlPanel({
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
         </button>
-        {isOpen.axes && (
-          <div className="p-3 space-y-2">
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1">
-                  <input
-                    type="checkbox"
-                    checked={xLock}
-                    onChange={(e) => onXLockChange(e.target.checked)}
-                    className="w-4 h-4 text-primary-600 rounded"
-                    aria-label="Lock X axis"
-                  />
-                  <span>X</span>
-                </label>
-                <input
-                  type="text"
-                  value={cursorX ?? ''}
-                  readOnly
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                  aria-label="Cursor X position"
-                />
-              </div>
-              <div>
-                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1">
-                  <input
-                    type="checkbox"
-                    checked={yLock}
-                    onChange={(e) => onYLockChange(e.target.checked)}
-                    className="w-4 h-4 text-primary-600 rounded"
-                    aria-label="Lock Y axis"
-                  />
-                  <span>Y</span>
-                </label>
-                <input
-                  type="text"
-                  value={cursorY ?? ''}
-                  readOnly
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                  aria-label="Cursor Y position"
-                />
-              </div>
+        {isOpen.datasets && (
+          <div className="p-3">
+            <div className="grid grid-cols-2 gap-2">
+              {DECAY_TYPES.map((type) => (
+                <button
+                  key={type.id}
+                  onClick={() => onDecayClick(type.id)}
+                  className={`px-2 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                    selectedDecay === type.id
+                      ? 'bg-primary-600 text-white hover:bg-primary-700'
+                      : 'bg-primary-100 text-primary-700 hover:bg-primary-200'
+                  }`}
+                  aria-label={`Load ${type.label} insulin decay curve`}
+                >
+                  {type.label}
+                </button>
+              ))}
             </div>
           </div>
         )}
+      </div>
+
+      {/* Actions Panel */}
+      <div className="bg-white/90 backdrop-blur-sm rounded-lg shadow-md overflow-hidden border border-gray-200/50">
+        <div className="w-full px-3 py-2 bg-primary-600 text-white font-semibold text-sm flex items-center justify-between">
+          <span>Actions</span>
+        </div>
+        <div className="p-3 space-y-2">
+          <div className="flex gap-2">
+            <button
+              onClick={onImport}
+              className="flex-1 px-3 py-1.5 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors text-xs font-medium"
+              aria-label="Import data"
+            >
+              Import
+            </button>
+            <button
+              onClick={onExport}
+              className="flex-1 px-3 py-1.5 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors text-xs font-medium"
+              aria-label="Export data"
+            >
+              Export
+            </button>
+          </div>
+          <button
+            onClick={onNormalize}
+            className="w-full px-3 py-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-xs font-medium"
+            aria-label="Normalize data"
+          >
+            Normalize
+          </button>
+        </div>
       </div>
 
       {/* Options Panel */}
@@ -303,16 +311,16 @@ export default function ControlPanel({
         )}
       </div>
 
-      {/* Datasets Panel */}
+      {/* Axes Panel */}
       <div className="bg-white/90 backdrop-blur-sm rounded-lg shadow-md overflow-hidden border border-gray-200/50">
         <button
-          onClick={() => toggleSection('datasets')}
+          onClick={() => toggleSection('axes')}
           className="w-full px-3 py-2 bg-primary-600 text-white font-semibold text-sm flex items-center justify-between hover:bg-primary-700 transition-colors"
-          aria-expanded={isOpen.datasets}
+          aria-expanded={isOpen.axes}
         >
-          <span>Datasets</span>
+          <span>Axes</span>
           <svg
-            className={`w-5 h-5 transition-transform ${isOpen.datasets ? 'rotate-180' : ''}`}
+            className={`w-5 h-5 transition-transform ${isOpen.axes ? 'rotate-180' : ''}`}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -320,70 +328,48 @@ export default function ControlPanel({
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
         </button>
-        {isOpen.datasets && (
-          <div className="p-3">
-            <div className="grid grid-cols-2 gap-2">
-              {DECAY_TYPES.map((type) => (
-                <button
-                  key={type.id}
-                  onClick={() => onDecayClick(type.id)}
-                  className={`px-2 py-1.5 rounded-md text-xs font-medium transition-colors ${
-                    selectedDecay === type.id
-                      ? 'bg-primary-600 text-white hover:bg-primary-700'
-                      : 'bg-primary-100 text-primary-700 hover:bg-primary-200'
-                  }`}
-                  aria-label={`Load ${type.label} insulin decay curve`}
-                >
-                  {type.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Actions Panel */}
-      <div className="bg-white/90 backdrop-blur-sm rounded-lg shadow-md overflow-hidden border border-gray-200/50">
-        <button
-          onClick={() => toggleSection('actions')}
-          className="w-full px-3 py-2 bg-primary-600 text-white font-semibold text-sm flex items-center justify-between hover:bg-primary-700 transition-colors"
-          aria-expanded={isOpen.actions}
-        >
-          <span>Actions</span>
-          <svg
-            className={`w-5 h-5 transition-transform ${isOpen.actions ? 'rotate-180' : ''}`}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-          </svg>
-        </button>
-        {isOpen.actions && (
+        {isOpen.axes && (
           <div className="p-3 space-y-2">
-            <div className="flex gap-2">
-              <button
-                onClick={onImport}
-                className="flex-1 px-3 py-1.5 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors text-xs font-medium"
-                aria-label="Import data"
-              >
-                Import
-              </button>
-              <button
-                onClick={onExport}
-                className="flex-1 px-3 py-1.5 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors text-xs font-medium"
-                aria-label="Export data"
-              >
-                Export
-              </button>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1">
+                  <input
+                    type="checkbox"
+                    checked={xLock}
+                    onChange={(e) => onXLockChange(e.target.checked)}
+                    className="w-4 h-4 text-primary-600 rounded"
+                    aria-label="Lock X axis"
+                  />
+                  <span>X</span>
+                </label>
+                <input
+                  type="text"
+                  value={cursorX ?? ''}
+                  readOnly
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  aria-label="Cursor X position"
+                />
+              </div>
+              <div>
+                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1">
+                  <input
+                    type="checkbox"
+                    checked={yLock}
+                    onChange={(e) => onYLockChange(e.target.checked)}
+                    className="w-4 h-4 text-primary-600 rounded"
+                    aria-label="Lock Y axis"
+                  />
+                  <span>Y</span>
+                </label>
+                <input
+                  type="text"
+                  value={cursorY ?? ''}
+                  readOnly
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  aria-label="Cursor Y position"
+                />
+              </div>
             </div>
-            <button
-              onClick={onNormalize}
-              className="w-full px-3 py-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-xs font-medium"
-              aria-label="Normalize data"
-            >
-              Normalize
-            </button>
           </div>
         )}
       </div>

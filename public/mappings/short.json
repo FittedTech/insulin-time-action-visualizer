@@ -1,4 +1,7 @@
 {
+  "examples": "Regular insulin (Humulin R, Novolin R)",
+  "description": "Short-acting insulin is taken 30-60 minutes before meals to control blood sugar. It starts working in 30 minutes, peaks in 2-3 hours, and lasts 3-6 hours. Used for mealtime coverage, often in combination with longer-acting insulin.",
+  "minuteDecays": {
     "0": 0.025,
     "5": 0.05,
     "10": 0.075,
@@ -119,4 +122,5 @@
     "585": 0.002,
     "590": 0.001,
     "595": 0
+  }
 }

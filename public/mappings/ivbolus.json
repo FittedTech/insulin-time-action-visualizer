@@ -1,4 +1,7 @@
 {
+  "examples": "IV bolus administration (direct intravenous injection)",
+  "description": "IV bolus insulin is administered directly into the bloodstream in hospital settings for rapid blood sugar control. It acts almost immediately with a very short duration, typically used in emergency situations or during medical procedures.",
+  "minuteDecays": {
     "0": 0.7792068595927117,
     "5": 0.8670953912111469,
     "10": 0.8821007502679529,
@@ -11,4 +14,5 @@
     "45": 0.05144694533762062,
     "50": 0.02143622722400862,
     "55": 0
+  }
 }
