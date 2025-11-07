@@ -120,12 +120,12 @@ export default function ControlPanel({
   }
 
   return (
-    <div className="w-full h-full overflow-y-auto space-y-4 p-4">
+    <div className="w-full h-full overflow-y-auto space-y-3 p-4">
       {/* Axes Panel */}
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
+      <div className="bg-white/90 backdrop-blur-sm rounded-lg shadow-md overflow-hidden border border-gray-200/50">
         <button
           onClick={() => toggleSection('axes')}
-          className="w-full px-4 py-3 bg-primary-600 text-white font-semibold flex items-center justify-between hover:bg-primary-700 transition-colors"
+          className="w-full px-3 py-2 bg-primary-600 text-white font-semibold text-sm flex items-center justify-between hover:bg-primary-700 transition-colors"
           aria-expanded={isOpen.axes}
         >
           <span>Axes</span>
@@ -139,7 +139,7 @@ export default function ControlPanel({
           </svg>
         </button>
         {isOpen.axes && (
-          <div className="p-4 space-y-3">
+          <div className="p-3 space-y-2">
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1">
@@ -185,10 +185,10 @@ export default function ControlPanel({
       </div>
 
       {/* Options Panel */}
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
+      <div className="bg-white/90 backdrop-blur-sm rounded-lg shadow-md overflow-hidden border border-gray-200/50">
         <button
           onClick={() => toggleSection('options')}
-          className="w-full px-4 py-3 bg-primary-600 text-white font-semibold flex items-center justify-between hover:bg-primary-700 transition-colors"
+          className="w-full px-3 py-2 bg-primary-600 text-white font-semibold text-sm flex items-center justify-between hover:bg-primary-700 transition-colors"
           aria-expanded={isOpen.options}
         >
           <span>Options</span>
@@ -202,18 +202,18 @@ export default function ControlPanel({
           </svg>
         </button>
         {isOpen.options && (
-          <div className="p-4 space-y-4">
-            <div className="bg-blue-50 border border-blue-200 rounded-md p-3 flex items-start gap-2">
-              <svg className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+          <div className="p-3 space-y-3">
+            <div className="bg-blue-50 border border-blue-200 rounded-md p-2 flex items-start gap-2">
+              <svg className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
               </svg>
-              <p className="text-sm text-blue-800">Data must be normalized before setting dose.</p>
+              <p className="text-xs text-blue-800">Data must be normalized before setting dose.</p>
             </div>
 
             <div>
-              <div className="flex justify-between items-center mb-2">
-                <label className="text-sm font-medium text-gray-700">Segments</label>
-                <span className="text-sm text-gray-500">({segments})</span>
+              <div className="flex justify-between items-center mb-1">
+                <label className="text-xs font-medium text-gray-700">Segments</label>
+                <span className="text-xs text-gray-500">({segments})</span>
               </div>
               <input
                 type="range"
@@ -228,9 +228,9 @@ export default function ControlPanel({
             </div>
 
             <div>
-              <div className="flex justify-between items-center mb-2">
-                <label className="text-sm font-medium text-gray-700">Radius</label>
-                <span className="text-sm text-gray-500">({radius}px)</span>
+              <div className="flex justify-between items-center mb-1">
+                <label className="text-xs font-medium text-gray-700">Radius</label>
+                <span className="text-xs text-gray-500">({radius}px)</span>
               </div>
               <input
                 type="range"
@@ -245,9 +245,9 @@ export default function ControlPanel({
             </div>
 
             <div>
-              <div className="flex justify-between items-center mb-2">
-                <label className="text-sm font-medium text-gray-700">Selection</label>
-                <span className="text-sm text-gray-500">
+              <div className="flex justify-between items-center mb-1">
+                <label className="text-xs font-medium text-gray-700">Selection</label>
+                <span className="text-xs text-gray-500">
                   ({selection === 0 ? 'only radius' : `radius +${selection}px`})
                 </span>
               </div>
@@ -264,19 +264,19 @@ export default function ControlPanel({
             </div>
 
             <div className="pt-2 border-t border-gray-200">
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Dose</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">Dose</label>
                   <div className="flex">
                     <input
                       type="number"
                       value={dose || 0}
                       onChange={(e) => onDoseChange(parseInt(e.target.value, 10) || 0)}
                       disabled={!canSetDose}
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded-l-md focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+                      className="flex-1 px-2 py-1.5 text-sm border border-gray-300 rounded-l-md focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
                       aria-label="Dose in units"
                     />
-                    <span className="px-3 py-2 bg-gray-100 border border-l-0 border-gray-300 rounded-r-md text-sm text-gray-700">
+                    <span className="px-2 py-1.5 bg-gray-100 border border-l-0 border-gray-300 rounded-r-md text-xs text-gray-700">
                       units
                     </span>
                   </div>
@@ -284,14 +284,14 @@ export default function ControlPanel({
                 <div className="flex items-end gap-2">
                   <button
                     onClick={onSave}
-                    className="flex-1 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors font-medium"
+                    className="flex-1 px-3 py-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-xs font-medium"
                     aria-label="Save current state"
                   >
                     Save
                   </button>
                   <button
                     onClick={onReset}
-                    className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors font-medium"
+                    className="px-3 py-1.5 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-xs font-medium"
                     aria-label="Reset graph"
                   >
                     Reset
@@ -304,10 +304,10 @@ export default function ControlPanel({
       </div>
 
       {/* Datasets Panel */}
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
+      <div className="bg-white/90 backdrop-blur-sm rounded-lg shadow-md overflow-hidden border border-gray-200/50">
         <button
           onClick={() => toggleSection('datasets')}
-          className="w-full px-4 py-3 bg-primary-600 text-white font-semibold flex items-center justify-between hover:bg-primary-700 transition-colors"
+          className="w-full px-3 py-2 bg-primary-600 text-white font-semibold text-sm flex items-center justify-between hover:bg-primary-700 transition-colors"
           aria-expanded={isOpen.datasets}
         >
           <span>Datasets</span>
@@ -321,13 +321,13 @@ export default function ControlPanel({
           </svg>
         </button>
         {isOpen.datasets && (
-          <div className="p-4">
+          <div className="p-3">
             <div className="grid grid-cols-2 gap-2">
               {DECAY_TYPES.map((type) => (
                 <button
                   key={type.id}
                   onClick={() => onDecayClick(type.id)}
-                  className={`px-3 py-2 rounded-md font-medium transition-colors ${
+                  className={`px-2 py-1.5 rounded-md text-xs font-medium transition-colors ${
                     selectedDecay === type.id
                       ? 'bg-primary-600 text-white hover:bg-primary-700'
                       : 'bg-primary-100 text-primary-700 hover:bg-primary-200'
@@ -343,10 +343,10 @@ export default function ControlPanel({
       </div>
 
       {/* Actions Panel */}
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
+      <div className="bg-white/90 backdrop-blur-sm rounded-lg shadow-md overflow-hidden border border-gray-200/50">
         <button
           onClick={() => toggleSection('actions')}
-          className="w-full px-4 py-3 bg-primary-600 text-white font-semibold flex items-center justify-between hover:bg-primary-700 transition-colors"
+          className="w-full px-3 py-2 bg-primary-600 text-white font-semibold text-sm flex items-center justify-between hover:bg-primary-700 transition-colors"
           aria-expanded={isOpen.actions}
         >
           <span>Actions</span>
@@ -360,18 +360,18 @@ export default function ControlPanel({
           </svg>
         </button>
         {isOpen.actions && (
-          <div className="p-4 space-y-2">
+          <div className="p-3 space-y-2">
             <div className="flex gap-2">
               <button
                 onClick={onImport}
-                className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors font-medium"
+                className="flex-1 px-3 py-1.5 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors text-xs font-medium"
                 aria-label="Import data"
               >
                 Import
               </button>
               <button
                 onClick={onExport}
-                className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors font-medium"
+                className="flex-1 px-3 py-1.5 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors text-xs font-medium"
                 aria-label="Export data"
               >
                 Export
@@ -379,7 +379,7 @@ export default function ControlPanel({
             </div>
             <button
               onClick={onNormalize}
-              className="w-full px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors font-medium"
+              className="w-full px-3 py-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-xs font-medium"
               aria-label="Normalize data"
             >
               Normalize

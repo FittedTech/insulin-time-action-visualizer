@@ -558,60 +558,80 @@ export default function Home() {
           }),
         }}
       />
-      <div className="min-h-screen p-4">
-        <div className="max-w-[1920px] mx-auto">
-          <h1 className="text-3xl font-bold text-gray-900 mb-6 text-center">
-            Insulin Time-Action Visualizer
-          </h1>
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 h-[calc(100vh-120px)]">
-          {/* Canvas Area */}
-          <div className="lg:col-span-3 bg-white rounded-lg shadow-lg p-4">
-            <div className="h-full relative">
-              <Canvas
-                canvasRef={canvasRef}
-                elements={elements}
-                segmentDims={segmentDims}
-                boxDims={boxDims}
-                selectionRadius={selectionRadius}
-                radius={radius}
-                dose={dose}
-                onMouseDown={handleMouseDown}
-                onMouseMove={handleMouseMove}
-                onMouseUp={handleMouseUp}
-                onMouseOut={handleMouseOut}
-              />
+      <div className="flex flex-col h-screen overflow-hidden">
+        {/* Header */}
+        <header className="flex-shrink-0 bg-white border-b border-gray-200 px-4 sm:px-6 py-4 sm:py-5">
+          <div className="max-w-[1920px] mx-auto">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
+              Insulin Time-Action Visualizer
+            </h1>
+            <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+            Tool to build and view insulin time-action (IOB) curves. You enter insulin type and basic parameters (onset, peak, duration), and it outputs a time→% active JSON map that approximates published insulin profiles (rapid, short, intermediate, basal). For modeling/SW use, not for clinical dosing.
+            </p>
+          </div>
+        </header>
+
+        {/* Main Content - Takes remaining space */}
+        <main className="flex-1 min-h-0 overflow-hidden px-4 sm:px-6 py-4 sm:py-6">
+          <div className="max-w-[1920px] mx-auto h-full">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 sm:gap-6 h-full">
+              {/* Canvas Area */}
+              <div className="md:col-span-3 bg-gradient-to-br from-white via-blue-50/30 to-cyan-50/20 rounded-xl shadow-2xl border-2 border-gray-200/50 backdrop-blur-sm p-5 sm:p-6 min-h-0 relative overflow-hidden">
+                {/* Decorative corner accent */}
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-primary-200/20 to-transparent rounded-bl-full pointer-events-none" />
+                <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-cyan-200/20 to-transparent rounded-tr-full pointer-events-none" />
+                
+                {/* Inner graph container */}
+                <div className="h-full relative bg-white/80 backdrop-blur-sm rounded-lg border-2 border-gray-200/60 shadow-inner p-3 ring-1 ring-gray-100/50">
+                  <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/5 to-primary-50/10 rounded-lg pointer-events-none" />
+                  <Canvas
+                    canvasRef={canvasRef}
+                    elements={elements}
+                    segmentDims={segmentDims}
+                    boxDims={boxDims}
+                    selectionRadius={selectionRadius}
+                    radius={radius}
+                    dose={dose}
+                    onMouseDown={handleMouseDown}
+                    onMouseMove={handleMouseMove}
+                    onMouseUp={handleMouseUp}
+                    onMouseOut={handleMouseOut}
+                  />
+                </div>
+              </div>
+
+              {/* Control Panel */}
+              <div className="md:col-span-1 bg-gradient-to-br from-slate-50 via-blue-50/40 to-cyan-50/30 rounded-xl shadow-xl border-2 border-gray-200/50 min-h-0 overflow-hidden relative">
+                {/* Decorative accent */}
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-500 via-cyan-500 to-primary-500" />
+                <ControlPanel
+                  segments={segmentDims.num}
+                  radius={radius}
+                  selection={selectionRadius}
+                  dose={dose}
+                  cursorX={cursor.x}
+                  cursorY={cursor.y}
+                  xLock={xLock}
+                  yLock={yLock}
+                  onSegmentsChange={handleSegmentsChange}
+                  onRadiusChange={setRadius}
+                  onSelectionChange={setSelectionRadius}
+                  onDoseChange={setDose}
+                  onXLockChange={setXLock}
+                  onYLockChange={setYLock}
+                  onReset={handleReset}
+                  onSave={handleSave}
+                  onNormalize={handleNormalize}
+                  onImport={() => setImportModalOpen(true)}
+                  onExport={handleExport}
+                  onDecayClick={handleDecayClick}
+                  selectedDecay={selectedDecay}
+                  canSetDose={canSetDose}
+                />
+              </div>
             </div>
           </div>
-
-          {/* Control Panel */}
-          <div className="lg:col-span-1 bg-white rounded-lg shadow-lg">
-            <ControlPanel
-              segments={segmentDims.num}
-              radius={radius}
-              selection={selectionRadius}
-              dose={dose}
-              cursorX={cursor.x}
-              cursorY={cursor.y}
-              xLock={xLock}
-              yLock={yLock}
-              onSegmentsChange={handleSegmentsChange}
-              onRadiusChange={setRadius}
-              onSelectionChange={setSelectionRadius}
-              onDoseChange={setDose}
-              onXLockChange={setXLock}
-              onYLockChange={setYLock}
-              onReset={handleReset}
-              onSave={handleSave}
-              onNormalize={handleNormalize}
-              onImport={() => setImportModalOpen(true)}
-              onExport={handleExport}
-              onDecayClick={handleDecayClick}
-              selectedDecay={selectedDecay}
-              canSetDose={canSetDose}
-            />
-          </div>
-        </div>
-      </div>
+        </main>
 
       {/* Import Modal */}
       <Modal
@@ -681,32 +701,41 @@ export default function Home() {
         />
       </Modal>
 
-      {/* Footer */}
-      <footer className="mt-8 pb-4 text-center">
-        <div className="text-sm text-gray-600 space-y-2">
-          <p className="text-gray-500">
-            Developed by{' '}
-            <span className="font-semibold text-gray-700">Fitted Tech</span>
-          </p>
-          <div className="flex items-center justify-center gap-4 text-xs text-gray-500">
-            <a
-              href="mailto:contact@fittedtech.com?subject=Insulin Decay Tool Feedback"
-              className="hover:text-primary-600 transition-colors underline decoration-dotted underline-offset-2"
-            >
-              Have feedback? Contact us here
-            </a>
-            <span className="text-gray-300">•</span>
-            <a
-              href="https://github.com/FittedTech/insulin-time-action-visualizer"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-primary-600 transition-colors underline decoration-dotted underline-offset-2"
-            >
-              View the source code here
-            </a>
+        {/* Footer - Fixed to bottom */}
+        <footer className="flex-shrink-0 bg-white border-t border-gray-200 px-4 sm:px-6 py-2 sm:py-3">
+          <div className="max-w-[1920px] mx-auto">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-xs sm:text-sm text-gray-600">
+              <p className="text-gray-500">
+                Developed by{' '}
+                <a
+                  href="https://www.linkedin.com/in/conner-aiken"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-gray-700 hover:text-primary-600 transition-colors underline decoration-dotted underline-offset-2"
+                >
+                  Conner Aiken
+                </a>
+              </p>
+              <div className="flex items-center gap-2 sm:gap-4 text-xs text-gray-500">
+                <a
+                  href="mailto:contact@fittedtech.com?subject=Insulin Decay Tool Feedback"
+                  className="hover:text-primary-600 transition-colors underline decoration-dotted underline-offset-2"
+                >
+                  Have feedback? Contact us here
+                </a>
+                <span className="text-gray-300 hidden sm:inline">•</span>
+                <a
+                  href="https://github.com/FittedTech/insulin-time-action-visualizer"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-primary-600 transition-colors underline decoration-dotted underline-offset-2"
+                >
+                  View the source code here
+                </a>
+              </div>
+            </div>
           </div>
-        </div>
-      </footer>
+        </footer>
       </div>
     </>
   )

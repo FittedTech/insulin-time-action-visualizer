@@ -12,16 +12,20 @@ export default function MobileNotice() {
 
   useEffect(() => {
     /**
-     * Checks if the current device is a mobile device.
+     * Checks if the current device is a mobile device (not tablet).
      * 
-     * @returns True if the device is mobile
+     * @returns True if the device is mobile (phone, not tablet)
      */
     const checkMobile = () => {
       const userAgent = navigator.userAgent || navigator.vendor
-      const mobileRegex = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i
+      const mobileRegex = /android|webos|iphone|ipod|blackberry|iemobile|opera mini/i
       const isMobileDevice = mobileRegex.test(userAgent.toLowerCase())
-      const isSmallScreen = window.innerWidth < 1024 // lg breakpoint
-      return isMobileDevice || isSmallScreen
+      // Check for tablets specifically and exclude them
+      const isTablet = /ipad|tablet|playbook|silk/i.test(userAgent.toLowerCase()) || 
+                      (window.innerWidth >= 768 && window.innerWidth < 1024)
+      const isSmallScreen = window.innerWidth < 768 // md breakpoint (tablet and below)
+      // Show notice only on phones, not tablets
+      return (isMobileDevice && !isTablet) || (isSmallScreen && !isTablet)
     }
 
     setIsMobile(checkMobile())

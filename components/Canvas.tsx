@@ -94,16 +94,18 @@ export default function Canvas({
     elements: GraphSegment[],
     dose: number
   ) => {
-    const ySegment = 0.025
     ctx.strokeStyle = '#333'
     ctx.font = '12px system-ui, -apple-system, sans-serif'
     ctx.fillStyle = '#333'
 
     // Draw Y-axis (vertical) - units/dose percentage
+    // Show from 0% to 100% (0 to 1.0)
     ctx.globalAlpha = 0.25
-    for (let i = ySegment; i <= 1 + ySegment; i += ySegment) {
-      const y = boxDims.innerHeight - (i * boxDims.innerHeight) + (boxDims.paddingHeight / 2)
-      let label = dose ? (i) * dose : (i * 100)
+    const numLabels = 20 // Show 20 grid lines (0%, 5%, 10%, ..., 100%)
+    for (let i = 0; i <= numLabels; i++) {
+      const percent = i / numLabels // 0.0 to 1.0
+      const y = boxDims.innerHeight - (percent * boxDims.innerHeight) + (boxDims.paddingHeight / 2)
+      let label = dose ? percent * dose : percent * 100
       label = dose ? Number(label.toFixed(2)) : Number(label.toFixed(1))
       const labelText = dose ? `${label} units` : `${label}%`
 
